@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -34,6 +35,18 @@ class _LoginPageState extends State<LoginPage> {
       // change it later to custom exceptions or toast
       print('something went wrong');
     }
+  }
+
+  Future<void> _signUpUsingGoogleAccount() async {
+    GoogleSignInAccount? googleAccount = await GoogleSignIn().signIn();
+
+    if (googleAccount == null) {
+      // change it later to custom exceptions or toast
+      print('something went wrong');
+      return Future.value(null);
+    }
+
+    print('Successfull!!');
   }
 
   @override
@@ -197,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 60,
                       alignment: Alignment.center,
                       child: IconButton(
-                        onPressed: (() {}),
+                        onPressed: () => _signUpUsingGoogleAccount(),
                         icon: const FaIcon(
                           FontAwesomeIcons.google,
                           size: 48,
