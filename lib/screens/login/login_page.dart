@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,6 +14,28 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  Future<void> _signUpUsingEmailPassword(String email, String password) async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'weak-password') {
+        // change it later to custom exceptions or toast
+        print('weak password');
+      }
+      if (error.code == 'email-already-in-use') {
+        // change it later to custom exceptions or toast
+        print('email already in use!');
+      }
+    } catch (_) {
+      // change it later to custom exceptions or toast
+      print('something went wrong');
+    }
+  }
+
   @override
   void dispose() {
     emailController.dispose();
@@ -96,7 +119,8 @@ class _LoginPageState extends State<LoginPage> {
               height: 50,
               width: 375,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => _signUpUsingEmailPassword(
+                    emailController.text, passwordController.text),
                 child: const Text('Sign In'),
                 style: ElevatedButton.styleFrom(
                   elevation: 40,
@@ -165,7 +189,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20,),
+                    SizedBox(
+                      width: 20,
+                    ),
                     Container(
                       margin: EdgeInsets.all(10),
                       height: 60,

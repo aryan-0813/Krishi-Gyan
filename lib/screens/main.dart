@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'login/login_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +7,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'sign_up.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(const MyApp());
 }
 
